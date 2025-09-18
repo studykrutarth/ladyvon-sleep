@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Sleep Tracker", layout="centered")
 
 # Replace with your published Google Sheet CSV link
-SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv"
+SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNjtRwQwXXtX7vVHh_na6Ky1y3dA7mMBpe5q6ycZXzSj8o_zKE1pcolI7YXOxTP1Msd2hYT9hScv0Q/pub?output=csv"
 
 st.title("🛌 Sleep Tracker")
 
@@ -34,3 +34,4 @@ if not df.empty:
     st.pyplot(fig)
 else:
     st.info("No entries yet. Add some in your Google Sheet.")
+
