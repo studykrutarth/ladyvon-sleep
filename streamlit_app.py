@@ -7,7 +7,7 @@ st.set_page_config(page_title="Sleep Tracker", layout="centered")
 
 SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNjtRwQwXXtX7vVHh_na6Ky1y3dA7mMBpe5q6ycZXzSj8o_zKE1pcolI7YXOxTP1Msd2hYT9hScv0Q/pub?output=csv"
 
-st.title("🛌 Sleep Tracker")
+st.title("Ladyvon Sleep Tracker")
 
 # --- Load sheet ---
 try:
@@ -85,3 +85,4 @@ else:
 # --- Show data ---
 st.subheader("Sleep Log")
 st.dataframe(df, use_container_width=True)
+
