@@ -1,14 +1,21 @@
-# streamlit_app.py
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta, date, time
+import os
 
 st.set_page_config(page_title="Sleep Tracker", layout="centered")
 
-# Keep sleep data in session_state (resets if app restarts)
-if "sleep_data" not in st.session_state:
-    st.session_state.sleep_data = []
+CSV_FILE = "sleep_data.csv"
+
+# --- Helper functions ---
+def load_data():
+    if os.path.exists(CSV_FILE):
+        return pd.read_csv(CSV_FILE, parse_dates=["Date"])
+    return pd.DataFrame(columns=["Date", "Start", "End", "Duration (hrs)"])
+
+def save_data(df):
+    df.to_csv(CSV_FILE, index=False)
 
 def calculate_sleep(start_time_str, end_time_str):
     start = datetime.strptime(start_time_str, "%H:%M")
@@ -17,9 +24,12 @@ def calculate_sleep(start_time_str, end_time_str):
         end += timedelta(days=1)
     return round((end - start).total_seconds() / 3600, 2)
 
+# --- Load existing data ---
+df = load_data()
+
+# --- UI ---
 st.title("🛌 Sleep Tracker")
 
-# Input form (you use this to add data)
 with st.form("sleep_form"):
     d = st.date_input("Date", value=date.today())
     start_t = st.time_input("Sleep time", value=time(23, 0))
@@ -29,13 +39,15 @@ with st.form("sleep_form"):
         start_s = start_t.strftime("%H:%M")
         end_s = end_t.strftime("%H:%M")
         hrs = calculate_sleep(start_s, end_s)
-        st.session_state.sleep_data.append(
-            {"Date": d, "Start": start_s, "End": end_s, "Duration (hrs)": hrs}
-        )
+        new_entry = pd.DataFrame([{
+            "Date": d,
+            "Start": start_s,
+            "End": end_s,
+            "Duration (hrs)": hrs
+        }])
+        df = pd.concat([df, new_entry], ignore_index=True)
+        save_data(df)
         st.success(f"Added: {hrs} hrs")
-
-# Convert to DataFrame
-df = pd.DataFrame(st.session_state.sleep_data)
 
 if not df.empty:
     st.subheader("Sleep Log")
