@@ -49,8 +49,6 @@ def calculate_sleep(start_str, end_str):
 df["Duration (hrs)"] = df.apply(lambda row: calculate_sleep(row["Start"], row["End"]), axis=1)
 
 # --- Show data ---
-st.subheader("Sleep Log")
-st.dataframe(df, use_container_width=True)
 
 # --- Stats ---
 if df["Duration (hrs)"].notna().any():
@@ -65,3 +63,6 @@ if df["Duration (hrs)"].notna().any():
     st.line_chart(df.set_index("Date")["Duration (hrs)"])
 else:
     st.info("No valid duration data found yet.")
+st.subheader("Sleep Log")
+st.dataframe(df, use_container_width=True)
+
